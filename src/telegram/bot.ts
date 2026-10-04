@@ -11,13 +11,16 @@ async function pollUpdates(offset: number): Promise<number> {
       console.log(JSON.stringify(update, null, 2));
 
       if (update.message) {
-        await handleMessage(update.message);
+        try {
+          await handleMessage(update.message);
+        } catch (error) {
+          console.error("Polling error:", error);
+        }
       }
-
       offset = update.update_id + 1;
     }
   } catch (error) {
-    console.error("Polling error:", error);
+    console.error("Fetch updates error:", error);
   }
 
   return offset;
